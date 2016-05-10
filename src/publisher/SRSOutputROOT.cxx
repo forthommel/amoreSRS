@@ -698,6 +698,10 @@ void SRSOutputROOT::WriteRootFile() {
         } 
         else {
             fHitTree->Write() ;
+
+		cout<<"fClusterTree = " << fClusterTree << endl;
+		cout<<"fFile = " << fFile << endl;		
+
             fClusterTree->Write();
         }
     }

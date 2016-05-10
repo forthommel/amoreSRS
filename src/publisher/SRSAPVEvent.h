@@ -39,6 +39,7 @@ public:
     vector<UInt_t> GetRawData32bits() {return fRawData32bits;}
     
     void ComputeRawData16bits();
+    void ComputeRawData16bitsZS();
     vector<UInt_t> GetRawData16bits() {return fRawData16bits ;}
     
     multimap<Int_t, Float_t> GetTimeBinMap() {return fapvTimeBinDataMap ;}
@@ -49,6 +50,7 @@ public:
     void ComputeMeanTimeBinRawPedestalData() ;
     vector<Float_t> GetRawPedestalData() {return fRawPedestalData ;}
     list <SRSHit * > ComputeListOfAPVHits() ;
+    list <SRSHit * > ComputeListOfAPVHitsZS() ;
     
     Int_t APVchannelMapping(Int_t chNo) ;
     Int_t StandardMapping(Int_t) ;
