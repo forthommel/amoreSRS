@@ -166,14 +166,15 @@ Int_t SRSAPVEvent::NS2StripMapping(Int_t chNo) {
 //=====================================================
 //For GE1/1-VII-L/S design
 //Use for ieta rows 1 through 4, and specific sectors from the set {(5,2),(5,3),(6,2),(6,3),(7,2),(8,2)}
+//NOTE for GE1/1-VII-S design the below is NOT valid for ieta 2 and 4 rows
 Int_t SRSAPVEvent::CMSStripMapping(Int_t chNo) {
     if((chNo%2)==1){ //Case: Input is Odd
-        //chNo= (chNo-1)/2+64;
-	return (128 - ( (chNo - 1) / 2 ) );	//ODD
+	//return (128 - ( (chNo - 1) / 2 ) );	//ODD
+	return ( ( chNo - 3) / 2 );		//ODD
     } //End Case: Input is Odd
     else{ //Case: Input is Even
-        //chNo =  63 - (chNo/2);
-	return ( ( chNo / 2 ) - 1 );		//EVEN
+	//return ( ( chNo / 2 ) - 1 );		//EVEN
+	return ( 128 - ( chNo / 2 ) );		//EVEN
     } //End Case: Input is Even
 
     //return chNo ;
@@ -184,12 +185,12 @@ Int_t SRSAPVEvent::CMSStripMapping(Int_t chNo) {
 //Use for specific sectors from the set {(7,1),(7,3),(8,1),(8,3)}
 Int_t SRSAPVEvent::CMSStripMapping1(Int_t chNo) {
     if((chNo%2)==1){ //Case: Input is Odd
-        //chNo= 63-(chNo-1)/2+64;
-	return ( (chNo + 125) / 2 );		//ODD
+	//return ( (chNo + 125) / 2 );		//ODD
+	return ( ( 129 - chNo ) / 2 );		//ODD
     } //End Case: Input is Odd
     else{ //Case: Input is Even
-	//chNo = (chNo/2);
-	return ( ( 128 - chNo) / 2 );		//EVEN
+	//return ( ( 128 - chNo) / 2 );		//EVEN
+	return ( ( chNo + 126 ) / 2 );		//EVEN
     } //End Case: Input is Even
     
     //return chNo ;
@@ -200,6 +201,22 @@ Int_t SRSAPVEvent::CMSStripMapping1(Int_t chNo) {
 //Use for specific sectors from the set {(5,1),(6,1)}
 Int_t SRSAPVEvent::CMSStripMapping2(Int_t chNo) {
     if((chNo%2)==1){ //Case: Input is Odd
+	//return ( ( 129 - chNo ) / 2 );		//ODD
+	return ( ( chNo + 125 ) / 2 );		//ODD
+    } //End Case: Input is Odd
+    else{ //Case: Input is Even
+	//return ( ( chNo + 126 ) / 2 );		//EVEN
+	return ( ( 128 - chNo ) / 2 );		//EVEN
+    } //End Case: Input is Even
+
+    //return chNo ;
+} //End SRSAPVEvent::CMSStripMapping2()
+
+//=====================================================
+//For GE1/1-VII-S design
+//Use for specific sectors from ieta rows 2 & 4
+Int_t SRSAPVEvent::CMSStripMapping3(Int_t chNo) {
+    if((chNo%2)==1){ //Case: Input is Odd
 	return ( ( 129 - chNo ) / 2 );		//ODD
     } //End Case: Input is Odd
     else{ //Case: Input is Even
@@ -207,13 +224,7 @@ Int_t SRSAPVEvent::CMSStripMapping2(Int_t chNo) {
     } //End Case: Input is Even
 
     //return chNo ;
-} //End SRSAPVEvent::CMSStripMapping2()
-
-//=====================================================
-Int_t SRSAPVEvent::CMSStripMapping3(Int_t chNo) {
-    //chNo=3;
-    return chNo ;
-}
+} //End SRSAPVEvent::CMSStripMapping3()
 
 //=====================================================
 Int_t SRSAPVEvent::CMSStripMapping4(Int_t chNo) {
