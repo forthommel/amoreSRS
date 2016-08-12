@@ -1,9 +1,9 @@
 /*******************************************************************************
- *  AMORE FOR SRS - SRS                                                         *
- *  SRSPublisherLinkDef                                                         *
- *  SRS Module Class                                                            *
- *  Author: Kondo GNANVO 18/08/2010                                             *
- *******************************************************************************/
+*  AMORE FOR SRS - SRS                                                         *
+*  SRSPublisherLinkDef                                                         *
+*  SRS Module Class                                                            *
+*  Author: Kondo GNANVO 18/08/2010                                             *
+*******************************************************************************/
 
 #ifdef __MAKECINT__
 

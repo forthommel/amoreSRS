@@ -1417,8 +1417,7 @@ void SRSHistoManager::PhysicsRun(SRSTrack * track, SRSEventBuilder * eventbuilde
 	((TH1F*) fObjToDraw[histoName])->Fill(clustMult) ;
       }
 
-      if ( (fVarType[histoName] == "ADCDIST") || (fVarType[histoName] == "SPECTRUM"))  {
-	//      if (fVarType[histoName] == "ADCDIST") {
+      if (fVarType[histoName] == "ADCDIST") {
 	if(eventbuilder->GetClusterMaxOrTotalADCs() == "totalADCs") {
 	  ((TH1F*) fObjToDraw[histoName])->SetXTitle("Cluster total charges (ADC counts)") ;
 	}
@@ -1517,8 +1516,7 @@ void SRSHistoManager::PhysicsRun(SRSTrack * track, SRSEventBuilder * eventbuilde
 	  ((TH1F*) fObjToDraw[histoName])->Fill(timeSlice) ;
 	}
        
-       if ( (fVarType[histoName] == "ADCDIST") || (fVarType[histoName] == "SPECTRUM"))  {
-	  //	if (fVarType[histoName] == "ADCDIST") {
+	if (fVarType[histoName] == "ADCDIST") {
 	  if(clusterNo > 1) continue ;
 	  if (clusterADCcounts != 0) ((TH1F*) fObjToDraw[histoName])->Fill(cluster->GetClusterADCs()) ;
 
@@ -2830,8 +2828,7 @@ void SRSHistoManager::SaveFTBF_AnalysisTXT(SRSTrack * track) {
       if (fVarType[histoname] == "CLUSTMULT") nbXEntries = ((Int_t) ((TH1F*) fObjToDraw[histoname])->GetEntries());
       if (fVarType[histoname] == "CLUSTSIZE") clustSizeX = ((TH1F*) fObjToDraw[histoname])->GetMean();
       if (fVarType[histoname] == "CLUSTMULT") clustMultX = ((TH1F*) fObjToDraw[histoname])->GetMean();
-      //      if (fVarType[histoname] == "ADCDIST")   adcDistX   = ((TH1F*) fObjToDraw[histoname])->GetMean();
-      if ( (fVarType[histoname] == "ADCDIST") || (fVarType[histoname] == "SPECTRUM"))  adcDistX   = ((TH1F*) fObjToDraw[histoname])->GetMean() ;
+      if (fVarType[histoname] == "ADCDIST")   adcDistX   = ((TH1F*) fObjToDraw[histoname])->GetMean();
       if (fVarType[histoname] == "TIMESLICE") tbClusterX    = ((TH1F*) fObjToDraw[histoname])->GetMean() ;
     }
 
@@ -2843,8 +2840,7 @@ void SRSHistoManager::SaveFTBF_AnalysisTXT(SRSTrack * track) {
       if (fVarType[histoname] == "CLUSTMULT") nbYEntries = ((Int_t) ((TH1F*) fObjToDraw[histoname])->GetEntries());
       if (fVarType[histoname] == "CLUSTSIZE") clustSizeY  = ((TH1F*) fObjToDraw[histoname])->GetMean() ;
       if (fVarType[histoname] == "CLUSTMULT") clustMultY  = ((TH1F*) fObjToDraw[histoname])->GetMean() ;
-      //      if (fVarType[histoname] == "ADCDIST")   adcDistY    = ((TH1F*) fObjToDraw[histoname])->GetMean() ;
-      if ( (fVarType[histoname] == "ADCDIST") || (fVarType[histoname] == "SPECTRUM"))  adcDistY   = ((TH1F*) fObjToDraw[histoname])->GetMean() ;
+      if (fVarType[histoname] == "ADCDIST")   adcDistY    = ((TH1F*) fObjToDraw[histoname])->GetMean() ;
       if (fVarType[histoname] == "TIMESLICE") tbClusterY    = ((TH1F*) fObjToDraw[histoname])->GetMean() ;
     }
     fprintf(ftbfFile, "%d   %d   %d   %d   %d   %d   %f   %f   %f   %f    %f   %f   %f   %f  %f\n", detId, runId, nbTriggers, nbEntries, nbXEntries, nbYEntries, chargeRatio, adcDistX, adcDistY, clustSizeX, clustSizeY, clustMultX, clustMultY, tbClusterX, tbClusterY);
@@ -2897,8 +2893,7 @@ void SRSHistoManager::SaveFTBF_AnalysisTXT(SRSTrack * track) {
       if (fVarType[histoname] == "CLUSTSIZE") clustSizeX = ((TH1F*) fObjToDraw[histoname])->GetMean();
       if (fVarType[histoname] == "CLUSTMULT") clustMultX = ((TH1F*) fObjToDraw[histoname])->GetMean();
       if (fVarType[histoname] == "TIMESLICE") tbClusterX    = ((TH1F*) fObjToDraw[histoname])->GetMean() ;
-      if ( (fVarType[histoname] == "ADCDIST") || (fVarType[histoname] == "SPECTRUM")) {
-	//      if (fVarType[histoname] == "ADCDIST")   {
+      if (fVarType[histoname] == "ADCDIST")   {
 	TF1 * adcxFit =  ((TH1F*) fObjToDraw[histoname])->GetFunction("landau") ;
 	if(adcxFit) adcDistX = adcxFit->GetParameter("MPV") ;
 	else        adcDistX = ((TH1F*) fObjToDraw[histoname])->GetMean() ;
@@ -2915,8 +2910,7 @@ void SRSHistoManager::SaveFTBF_AnalysisTXT(SRSTrack * track) {
       if (fVarType[histoname] == "CLUSTSIZE") clustSizeY  = ((TH1F*) fObjToDraw[histoname])->GetMean() ;
       if (fVarType[histoname] == "CLUSTMULT") clustMultY  = ((TH1F*) fObjToDraw[histoname])->GetMean() ;
       if (fVarType[histoname] == "TIMESLICE") tbClusterY    = ((TH1F*) fObjToDraw[histoname])->GetMean() ;
-      if ( (fVarType[histoname] == "ADCDIST") || (fVarType[histoname] == "SPECTRUM")) {
-	//      if (fVarType[histoname] == "ADCDIST")   {
+      if (fVarType[histoname] == "ADCDIST")   {
 	TF1 * adcyFit =  ((TH1F*) fObjToDraw[histoname])->GetFunction("landau") ;
 	if(adcyFit) adcDistY = adcyFit->GetParameter("MPV") ;
 	else        adcDistY = ((TH1F*) fObjToDraw[histoname])->GetMean() ;
@@ -3367,4 +3361,3 @@ void SRSHistoManager::DeleteClustersInDetectorPlaneMap( map<TString, list <SRSCl
   }
   stringListMap.clear() ;
 } 
-

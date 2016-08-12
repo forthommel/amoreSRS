@@ -50,12 +50,22 @@ SRSAPVEvent::SRSAPVEvent(Int_t fec_no, Int_t fec_channel, Int_t apv_id, Int_t ze
   fReadoutBoard = mapping->GetReadoutBoardFromDetector(fDetector) ;
   fDetectorType = mapping->GetDetectorTypeFromDetector(fDetector) ;
 
+  /**
+  if((fReadoutBoard == "CARTESIAN") || (fReadoutBoard == "UV_ANGLE_OLD")) {
+    vector <Float_t> cartesianReadoutMap = mapping->GetCartesianReadoutMap(fPlane) ;
+    fPlaneSize         = cartesianReadoutMap[1];
+    fNbOfAPVsFromPlane = (Int_t) (cartesianReadoutMap[2]) ;
+    //    printf("SRSAPVEvent::SRSAPVEvent  fPlane=%s, planeSize=%f, fNbOfAPVsFromPlane=%d, fPlaneOrientation=%d \n", fPlane.Data(), fPlaneSize, fNbOfAPVsFromPlane, fPlaneOrientation); 
+    printf("SRSAPVEvent::SRSAPVEvent => fDetector =%s,  fPlane=%s, planeSize=%f, fNbOfAPVsFromPlane=%d \n",fDetector.Data(), fPlane.Data(), fPlaneSize, fNbOfAPVsFromPlane); 
+    fPadDetectorMap.resize(5) ; 
+  }
+  */
 
   if(fReadoutBoard == "CARTESIAN") {
     fPlaneSize         = (mapping->GetCartesianReadoutMap(fPlane))[1]; 
     fNbOfAPVsFromPlane = (Int_t) ((mapping->GetCartesianReadoutMap(fPlane)) [2]) ;
     fPadDetectorMap.resize(5) ;
-    //    printf("SRSAPVEvent::SRSAPVEvent  detType=%s, plane=%s, planeSize=%f, fNbOfAPVsFromPlane=%d\n", fDetectorType.Data(), fPlane.Data(), fPlaneSize, fNbOfAPVsFromPlane) ;
+    //    printf("SRSAPVEvent::SRSAPVEvent  fPlane=%s, planeSize=%f, fNbOfAPVsFromPlane=%d\n", fPlane.Data(), fPlaneSize, fNbOfAPVsFromPlane) ;
   }
 
   if(fReadoutBoard == "UV_ANGLE") {
@@ -77,7 +87,7 @@ SRSAPVEvent::SRSAPVEvent(Int_t fec_no, Int_t fec_channel, Int_t apv_id, Int_t ze
   if(fReadoutBoard == "CMSGEM") {
     fEtaSectorPos = (mapping->GetCMSGEMReadoutMap(fPlane)) [0] ; 
     fPlaneSize    = (mapping->GetCMSGEMReadoutMap(fPlane)) [1] ;
-    fNbOfAPVsFromPlane = (Int_t) ((mapping->GetCMSGEMReadoutMap(fPlane)) [2]) ;
+    fNbOfAPVsFromPlane = (Int_t) ((mapping->GetCMSGEMReadoutMap(fPlane)) [1]) ;
     fPadDetectorMap.resize(5) ;
     //    printf("SRSAPVEvent::SRSAPVEvent   fPlane=%s, etaSectorPos=%f, planeSize=%f, fNbOfAPVsFromPlane=%d, \n", fPlane.Data(), fEtaSectorPos, fPlaneSize, fNbOfAPVsFromPlane); 
   }
@@ -94,6 +104,8 @@ SRSAPVEvent::SRSAPVEvent(Int_t fec_no, Int_t fec_channel, Int_t apv_id, Int_t ze
       fPadDetectorMap.resize(5) ;
     }
   }
+
+  //  if (fDetector.Contains("TrkGEM")) fZeroSupCut = 5;
   //  printf("SRSAPVEvent::SRSAPVEvent   fPlane=%s, etaSectorPos=%f, planeSize=%f, fNbOfAPVsFromPlane=%d, \n", fPlane.Data(), fEtaSectorPos, fPlaneSize, fNbOfAPVsFromPlane) ;
 }
 
@@ -153,6 +165,16 @@ Int_t SRSAPVEvent::NS2StripMapping(Int_t chNo) {
 }
 
 //=====================================================
+//Int_t SRSAPVEvent::CMSStripMapping(Int_t chNo) { 
+// if((chNo%2)==1){
+//   chNo= 127 -((chNo-1)/2);
+// }
+// else{
+//   chNo = (chNo/2);
+// }
+// return chNo ;
+//}
+
 Int_t SRSAPVEvent::CMSStripMapping(Int_t chNo) { 
   if((chNo%2)==1){
     chNo= (chNo-1)/2+64;
@@ -206,22 +228,6 @@ Int_t SRSAPVEvent::MMStripMappingAPV3(Int_t chNo){
 }
 
 //=====================================================
-//Int_t SRSAPVEvent::PRadStripsMapping(Int_t chNo) { 
-//  Int_t chno = chNo / 2 ;
-  //  chNo = chNo /2 ;
-  //  if (chNo % 2 == 0) chNo = 31 + (chNo / 2) ;
-
-//  if (chNo % 2 == 0) chNo = 31 + (chNo / 2) ;
-//  else {
-//    if (chNo < 64 ) chNo = 31 -  ( (chNo + 1) / 2) ;
-//    else            chNo = 127 - ( (chNo - 65) / 2 ) ;
-//  }
-  //  printf("SRSAPVEvent::PRadStripsMapping ==>  APVID=%d, chNo=%d, stripNo=%d, \n",fAPVID, chno, chNo) ;
-
-//  return chNo ;
-//}
-
-//=====================================================
 Int_t SRSAPVEvent::StandardMapping(Int_t chNo) { 
   return chNo ;
 }
@@ -251,7 +257,6 @@ Int_t SRSAPVEvent::StripMapping(Int_t chNo) {
   else if (fDetectorType == "NS2")       chNo = NS2StripMapping(chNo) ;
   else if (fDetectorType == "EICPROTO1") chNo = EICStripMapping(chNo) ;
   else if (fDetectorType == "HMSGEM")    chNo = HMSStripMapping(chNo) ;
-  //else if (fDetectorType == "PRADGEM")   chNo = PRadStripsMapping(chNo) ;
   else                                   chNo = StandardMapping(chNo) ;
   return chNo;
 }
@@ -502,6 +507,14 @@ list <SRSHit * >  SRSAPVEvent::ComputeListOfAPVHits() {
 	  continue ;
 	}
 
+	/**
+	if( fabs(TMath::Mean(timeBinADCs.begin(), timeBinADCs.end())) < fZeroSupCut * fPedestalNoises[stripNo] ) {
+	  stripPedestalNoise.push_back(TMath::Mean(timeBinADCs.begin(), timeBinADCs.end())) ;
+	  timeBinADCs.clear() ;
+	  continue ;
+	}
+	*/
+
 	if ( (Int_t) (timeBinADCs.size()) != 0 ) { 
 	  Float_t adcs = * (TMath::LocMax(timeBinADCs.begin(), timeBinADCs.end())) ;
 	  if(adcs < 0) adcs = 0 ;
@@ -634,4 +647,3 @@ void SRSAPVEvent::ComputeMeanTimeBinPedestalData() {
     meanTimeBinPedestalDataVect.clear() ;
   }
 }
-
