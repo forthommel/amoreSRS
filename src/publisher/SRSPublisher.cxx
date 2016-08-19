@@ -297,7 +297,7 @@ namespace amore {
             
             //-------------------------------------------------------------------------------------------------
             void SRSPublisher::ResetMonitors(void) {
-                if(fHMan) fHMan->ResetHistos() ;
+                //if(fHMan) fHMan->ResetHistos() ;
             }
             
             //-------------------------------------------------------------------------------------------------
@@ -363,7 +363,8 @@ namespace amore {
                         if ( (fEvent % fEventFrequencyNumber.Atoi()) == 0 ) {
                             
                             UInt_t * buffer = 0;
-                            TDATEEventParser * parser = event.DATEEventParser();
+                            //TDATEEventParser * parser = event.DATEEventParser();	//amore version 1.77.0
+		            EventParser * parser = event.DATEEventParser();		//amore version 2.25.0
                             parser->Parse();
                             
                             eventLdcIdType * firstLdcId = const_cast<eventLdcIdType*>(parser->FirstLDC());

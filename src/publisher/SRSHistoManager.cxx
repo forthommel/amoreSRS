@@ -165,6 +165,10 @@ void SRSHistoManager::DeleteROOTObjs() {
 //====================================================================================================================
 void SRSHistoManager::ResetHistos() {
     map<TString,TObject*>::const_iterator itr;
+
+	std::cout<<"fObjToDraw.size() = ";
+	std::cout<<fObjToDraw.size() << std::endl;
+
     for (itr = fObjToDraw.begin(); itr != fObjToDraw.end(); ++itr){
         TString objName = (*itr).first;
         if (fObjType[objName] == "1D") {

@@ -18,6 +18,8 @@ results/*.png
 
 # Misc #
 ########
+core.*
+configFileDir/core.*
 
 # ROOT Files #
 ##############
@@ -25,4 +27,4 @@ results/*.png
 
 # Text Files #
 ##############
-
+results/mapping.cfg
