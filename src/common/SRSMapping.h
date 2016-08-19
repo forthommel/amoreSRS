@@ -61,7 +61,7 @@ public:
   void LoadDefaultMapping(const char * mappingCfgFilename);
   void LoadAPVtoPadMapping(const char * mappingCfgFilename);
 
-  void SetAPVMap(TString detPlane, Int_t fecId, Int_t adcCh, Int_t apvNo, Int_t apvOrient, Int_t apvIndex, Int_t apvHdrLevel, Int_t stripmapping);
+  void SetAPVMap(TString detPlane, Int_t fecId, Int_t adcCh, Int_t apvNo, Int_t apvOrient, Int_t apvIndex, Int_t apvHdrLevel);
   void SetAPVtoPadMapping(Int_t fecId, Int_t adcCh, Int_t padId, Int_t apvCh) ;
 
   void Set1DStripsReadoutMap(TString readoutBoard, TString detType, TString detName, Int_t detID, TString plane,  Float_t size, Int_t connectors, Int_t orient) ;
@@ -76,7 +76,6 @@ public:
   map <Int_t, Int_t>  GetAPVIDFromAPVNoMap()         {return fAPVIDFromAPVNoMap ;}
   map <Int_t, Int_t>  GetAPVGainFromIDMap()          {return fAPVGainFromIDMap ;}
   map <Int_t, Int_t>  GetAPVOrientationFromIDMap()   {return fAPVOrientationFromIDMap;}
-  map <Int_t, Int_t>  GetAPVstripmappingFromIDMap()   {return fAPVstripmappingFromIDMap;}
   map <Int_t, Int_t>  GetAPVHeaderLevelFromIDMap()   {return fAPVHeaderLevelFromIDMap;}
   map <Int_t, Int_t>  GetAPVIndexOnPlaneFromIDMap()  {return fAPVIndexOnPlaneFromIDMap;}
 
@@ -123,7 +122,6 @@ public:
   Int_t GetAPVIDFromAPVNo(Int_t apvID)       {return fAPVIDFromAPVNoMap[apvID];}
   Int_t GetAPVIndexOnPlane(Int_t apvID)      {return fAPVIndexOnPlaneFromIDMap[apvID];}
   Int_t GetAPVOrientation(Int_t apvID)       {return fAPVOrientationFromIDMap[apvID];}
-  Int_t GetAPVstripmapping(Int_t apvID)       {return fAPVstripmappingFromIDMap[apvID];}
   Int_t GetAPVHeaderLevelFromID(Int_t apvID) {return fAPVHeaderLevelFromIDMap[apvID];}
   Int_t GetAPVIDFromName(TString apvName)    {return fAPVIDFromNameMap[apvName];}
 
@@ -230,7 +228,7 @@ private:
   Int_t fNbOfAPVs ;
 
   map<Int_t, Int_t>   fAPVHeaderLevelFromIDMap;
-  map<Int_t, Int_t>   fAPVNoFromIDMap, fAPVIDFromAPVNoMap, fAPVIndexOnPlaneFromIDMap,fAPVOrientationFromIDMap, fAPVstripmappingFromIDMap;
+  map<Int_t, Int_t>   fAPVNoFromIDMap, fAPVIDFromAPVNoMap, fAPVIndexOnPlaneFromIDMap,fAPVOrientationFromIDMap;
   map<TString, Int_t> fNbOfAPVsFromDetectorMap ;          
 
   map<Int_t, Int_t>      fAPVGainFromIDMap ; 
@@ -271,6 +269,7 @@ private:
 };
 
 #endif
+
 
 
 

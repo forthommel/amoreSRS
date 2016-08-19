@@ -1,11 +1,11 @@
 #ifndef SRSTRACKFIT_H
-#define SRSTRACKFIT_H
+#define SRSTRACKFIT_H 
 /*******************************************************************************
- *  AMORE FOR SRS - SRS                                                         *
- *  SRSTrackFit                                                                 *
- *  SRS Module Class                                                            *
- *  Author: Kondo GNANVO 01/05/2011                                             *
- *******************************************************************************/
+*  AMORE FOR SRS - SRS                                                         *
+*  SRSTrackFit                                                                 *
+*  SRS Module Class                                                            *
+*  Author: Kondo GNANVO 01/05/2011                                             *
+*******************************************************************************/
 
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <map>

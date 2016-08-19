@@ -15,8 +15,6 @@ SRSAPVEvent::SRSAPVEvent(Int_t fec_no, Int_t fec_channel, Int_t apv_id, Int_t ze
     fPlaneSize       = 102.4 ;
     fAPVIndexOnPlane = 2;
     fAPVOrientation  = 0 ;
-    fAPVstripmapping = 0 ;
-    fAPVstripmapping = 0 ;
     fAPVHeaderLevel  = 1300 ;
     fEtaSectorPos = 0 ;
     
@@ -46,8 +44,6 @@ SRSAPVEvent::SRSAPVEvent(Int_t fec_no, Int_t fec_channel, Int_t apv_id, Int_t ze
     fAPVHeaderLevel  = mapping->GetAPVHeaderLevelFromID(apv_id);
     fAPVIndexOnPlane = mapping->GetAPVIndexOnPlane(apv_id);
     fAPVOrientation  = mapping->GetAPVOrientation(apv_id);
-    fAPVstripmapping = mapping->GetAPVstripmapping(apv_id);
-    
     
     fPlane        = mapping->GetDetectorPlaneFromAPVID(apv_id);
     fDetector     = mapping->GetDetectorFromPlane(fPlane) ;
@@ -168,28 +164,6 @@ Int_t SRSAPVEvent::CMSStripMapping(Int_t chNo) {
 }
 
 //=====================================================
-Int_t SRSAPVEvent::CMSStripMapping2(Int_t chNo) {
-    if((chNo%2)==1){
-        chNo= 63 - (chNo-1)/2+64;
-    }
-    else{
-        chNo =  (chNo/2);
-    }
-    return chNo ;
-}
-//=====================================================
-Int_t SRSAPVEvent::CMSStripMapping3(Int_t chNo) {
-    chNo=10;
-    return chNo ;
-}
-
-//=====================================================
-Int_t SRSAPVEvent::CMSStripMapping4(Int_t chNo) {
-    chNo=4;
-    return chNo ;
-}
-
-//=====================================================
 Int_t SRSAPVEvent::MMStripMappingAPV1(Int_t chNo){
     if((chNo%2)==1){
         chNo=((chNo-1)/2) + 32;
@@ -271,25 +245,14 @@ Int_t SRSAPVEvent::HMSStripMapping(Int_t chNo) {
 
 //=====================================================
 Int_t SRSAPVEvent::StripMapping(Int_t chNo) {
-    
     chNo = APVchannelCorrection(chNo) ;
-    if (fDetectorType == "CMSGEM") {
-        if (fAPVstripmapping==0) chNo = CMSStripMapping(chNo) ;
-        if (fAPVstripmapping==1) chNo = CMSStripMapping1(chNo) ;
-        if (fAPVstripmapping==2) chNo = CMSStripMapping2(chNo) ;
-        if (fAPVstripmapping==3) chNo = CMSStripMapping3(chNo) ;
-        if (fAPVstripmapping==4) chNo = CMSStripMapping4(chNo) ;
-        //cout << "AA " << chNo << endl;
-    }
-    
+    if (fDetectorType == "CMSGEM")         chNo = CMSStripMapping(chNo) ;
     else if (fDetectorType == "ZIGZAG")    chNo = ZigZagStripMapping(chNo) ;
     else if (fDetectorType == "NS2")       chNo = NS2StripMapping(chNo) ;
     else if (fDetectorType == "EICPROTO1") chNo = EICStripMapping(chNo) ;
     else if (fDetectorType == "HMSGEM")    chNo = HMSStripMapping(chNo) ;
     //else if (fDetectorType == "PRADGEM")   chNo = PRadStripsMapping(chNo) ;
     else                                   chNo = StandardMapping(chNo) ;
-    //cout << "BB " << chNo << endl;
-    
     return chNo;
 }
 
@@ -311,36 +274,14 @@ void SRSAPVEvent::Print() {
     }
 }
 
+//=====================================================
 void SRSAPVEvent::ComputeRawData16bits() {
-    
-    //printf("SRSAPVEvent::ComputeRawDataZS()==> fRawData32bits.size() = %d \n",(Int_t) (fRawData32bits.size()) ) ;
+    //  printf("SRSAPVEvent::ComputeRawData()==> fRawData32bits.size() = %d \n",(Int_t) (fRawData32bits.size())) ;
     fRawData16bits.clear() ;
     vector<UInt_t>::const_iterator rawData_itr ;
     for (rawData_itr = fRawData32bits.begin(); rawData_itr != fRawData32bits.end(); ++rawData_itr) {
         UInt_t word32bit = * rawData_itr ;
-        //cout << "Word32bit is = " << word32bit << endl;
-        
         if (((word32bit >> 8) & 0xffffff) != 0x414443) {
-            UInt_t data1 = (word32bit>> 24) & 0xff ;
-            UInt_t data2 = (word32bit >> 16) & 0xff ;
-            UInt_t data3 = (word32bit >> 8)  & 0xff ;
-            UInt_t data4 = word32bit  & 0xff ;
-            fRawData16bits.push_back(((data2 << 8) | data1)) ;
-            fRawData16bits.push_back(((data4 << 8) | data3)) ;
-        }
-    }
-}
-
-
-void SRSAPVEvent::ComputeRawData16bitsZS() {
-    
-    //printf("SRSAPVEvent::ComputeRawDataZS()==> fRawData32bits.size() = %d \n",(Int_t) (fRawData32bits.size()) ) ;
-    fRawData16bits.clear() ;
-    vector<UInt_t>::const_iterator rawData_itr ;
-    for (rawData_itr = fRawData32bits.begin(); rawData_itr != fRawData32bits.end(); ++rawData_itr) {
-        UInt_t word32bit = * rawData_itr ;
-        //cout << "Word32bit is = " << word32bit << endl;
-        if (((word32bit >> 8) & 0xffffff) != 0x41505a) {
             UInt_t data1 = (word32bit>> 24) & 0xff ;
             UInt_t data2 = (word32bit >> 16) & 0xff ;
             UInt_t data3 = (word32bit >> 8)  & 0xff ;
@@ -575,7 +516,6 @@ list <SRSHit * >  SRSAPVEvent::ComputeListOfAPVHits() {
                     apvHit->SetPlaneSize(fPlaneSize) ;
                     apvHit->SetTrapezoidDetRadius(fTrapezoidDetInnerRadius, fTrapezoidDetOuterRadius) ;
                     apvHit->SetAPVOrientation(fAPVOrientation) ;
-                    apvHit->SetAPVstripmapping(fAPVstripmapping) ;
                     apvHit->SetAPVIndexOnPlane(fAPVIndexOnPlane) ;
                     apvHit->SetNbAPVsFromPlane(fNbOfAPVsFromPlane) ;
                     apvHit->SetTimeBinADCs(timeBinADCs) ;
@@ -603,7 +543,6 @@ list <SRSHit * >  SRSAPVEvent::ComputeListOfAPVHits() {
                 apvHit->SetPlaneSize(fPlaneSize) ;
                 apvHit->SetTrapezoidDetRadius(fTrapezoidDetInnerRadius, fTrapezoidDetOuterRadius) ;
                 apvHit->SetAPVOrientation(fAPVOrientation) ;
-                apvHit->SetAPVstripmapping(fAPVstripmapping) ;
                 apvHit->SetAPVIndexOnPlane(fAPVIndexOnPlane) ;
                 apvHit->SetNbAPVsFromPlane(fNbOfAPVsFromPlane) ;
                 apvHit->SetTimeBinADCs(timeBinADCs) ;
@@ -622,127 +561,8 @@ list <SRSHit * >  SRSAPVEvent::ComputeListOfAPVHits() {
     return listOfHits ;
 }
 
-list <SRSHit * >  SRSAPVEvent::ComputeListOfAPVHitsZS() {
-    //printf("SRSAPVEvent::ComputeListOfAPVHits()==> enter \n") ;
-    
-    fIsCosmicRunFlag = kTRUE ;
-    fIsPedestalRunFlag = kFALSE ;
-    fIsRawPedestalRunFlag = kFALSE ;
-    
-    ComputeRawData16bitsZS() ;
-    
-    Int_t idata = 0  ;
-    list <SRSHit * > listOfHits ;
-    TString plane = fPlane ;
-    Int_t padNo = 0 ;
-    vector<Float_t> timeBinADCs;
-    timeBinADCs.clear();
-    
-    Bool_t startDataFlag = kFALSE ;
-    
-    fapvTimeBinDataMap.clear() ;
-    UInt_t apvheaderlevel = (UInt_t)  fAPVHeaderLevel ;
-    Int_t size = fRawData16bits.size() ;
-    
-    std::list<Float_t> commonModeOffset,  commonModeOffset_odd, commonModeOffset_even ;
-    //Float_t apvBaseline = 4096 - TMath::Mean(fPedestalOffsets.begin(), fPedestalOffsets.end()) ;
-    
-    //cout << "fRawData16bits.size = " << size << endl;
-    while(idata < (size-1)) {
-        //printf("    SRSAPVEvent::ComputeTimeBinCommonMode()  ==> idata=%d, apvBaseline=%f \n",idata, apvBaseline) ;
-        
-        //===============================================================//
-        // Stefano Colafranceschi ZS code                                //
-        //===============================================================//
-        
-        Int_t adcbin, chNo;
-        
-        idata+=1;
-        // Global Event Dump
-        /*
-         cout << "GLOBAL DUMP fRawData16bits.size = " << size << " rawdata = " << fRawData16bits[idata] << " idata = " << idata << " hex is : " << "0x" << std::hex << fRawData16bits[idata] << std::dec << endl;
-         cin.get();
-         */
-        
-        // Reading out number of time bins from the header
-        std::stringstream ss;
-        ss << std::hex << (fRawData16bits[1]>>8);
-        ss >> adcbin;
-        //cout << "adcbin = " << adcbin << endl;
-        
-        
-        // VALID DATA AFTER idata=4
-        if ( idata>=4 ) {
-            if ( size>4 ) {
-                //cout << "Valid data found!" << endl;
-                startDataFlag = kTRUE ;
-            }
-        }
-        
-        if (startDataFlag == kTRUE) {
-            //cout << "1: startDataFlag == kTRUE" << endl;
-            //cout << "VALID DATA!!! " << endl;
-            if ( ((idata-4)%(adcbin+1))==0 ) {
-                //cout << "2: ((idata-4)%(adcbin+1))==0" << idata << "," << adcbin << endl;
-                chNo = fRawData16bits[idata]; //--- Eraldo
-            }
-            
-            if ( ((idata-4)%(adcbin+1))==adcbin ) {
-                Int_t stripNo = StripMapping(chNo) ;
-                
-                if (timeBinADCs.size()>0) {
-                    //cout << "3: timeBinADCs.size()>0" << endl;
-                    Float_t adcs = * (TMath::LocMax(timeBinADCs.begin(), timeBinADCs.end())) ;
-                    if(adcs < 0) adcs = 0 ;
-                    //cout << "Filling the hit!!!!" << endl;
-                    SRSHit * apvHit = new SRSHit() ;
-                    apvHit->SetAPVID(fAPVID) ;
-                    apvHit->IsHitFlag(kTRUE) ;
-                    apvHit->SetDetector(fDetector) ;
-                    apvHit->SetDetectorType(fDetectorType) ;
-                    apvHit->SetReadoutBoard(fReadoutBoard) ;
-                    apvHit->SetPadDetectorMap(fPadDetectorMap) ;
-                    apvHit->SetPlane(plane) ;
-                    apvHit->SetPlaneSize(fPlaneSize) ;
-                    apvHit->SetTrapezoidDetRadius(fTrapezoidDetInnerRadius, fTrapezoidDetOuterRadius) ;
-                    apvHit->SetAPVOrientation(fAPVOrientation) ;
-                    apvHit->SetAPVstripmapping(fAPVstripmapping) ;
-                    apvHit->SetAPVIndexOnPlane(fAPVIndexOnPlane) ;
-                    apvHit->SetNbAPVsFromPlane(fNbOfAPVsFromPlane) ;
-                    apvHit->SetTimeBinADCs(timeBinADCs) ;
-                    apvHit->SetHitADCs(fZeroSupCut, adcs, fIsHitMaxOrTotalADCs) ;
-                    apvHit->SetPadNo(padNo) ;
-                    apvHit->SetStripNo(stripNo) ;
-                    //cout << "Filling..." << stripNo << endl;
-                    listOfHits.push_back(apvHit) ;
-                }
-                timeBinADCs.clear();
-                //cout << "timeBinADCs cleared" << endl;
-            }
-            
-            // Getting the rawdata (Taking into account signed integers) and save them
-            Float_t rawdata = ((Float_t) fRawData16bits[idata]) ;
-            if ((fRawData16bits[idata]>>8)!=0) rawdata = rawdata - 65536;
-            rawdata = - rawdata ;
-            timeBinADCs.push_back(rawdata) ;
-            
-            
-            // Event Dump
-            //cout << "fRawData16bits.size = " << size << " channel number = " << StripNo << " rawdata = " << fRawData16bits[idata] << " idata = " << idata << " hex is : " << "0x" << std::hex << fRawData16bits[idata] << std::dec << " MSB = " << (fRawData16bits[idata]>>8) << endl;
-            
-            //cin.get();
-            
-            startDataFlag = kFALSE ;
-            continue ;
-        }
-    }
-    //  printf("  SRSAPVEvent::ComputeTimeBinCommonMode()==>exit \n") ;
-    return listOfHits ;
-}
-
-
 //========================================================================================================================
-void SRSAPVEvent::ComputeMeanTimeBinRawPedestalData() {
+void SRSAPVEvent::ComputeMeanTimeBinRawPedestalData() { 
     //  printf("SRSAPVEvent::ComputeMeanTimeBinRawPedestalData() \n") ;
     
     fPedSubFlag = kFALSE ;
@@ -766,7 +586,7 @@ void SRSAPVEvent::ComputeMeanTimeBinRawPedestalData() {
             
             if ((fReadoutBoard == "UV_ANGLE") &&  (fDetectorType == "EICPROTO1") ) {
                 if(stripNo < 64) meanTimeBinRawPedestalDataVect.push_back(rawdata - fCommonModeOffsets_even[timebin]) ;
-                else             meanTimeBinRawPedestalDataVect.push_back(rawdata - fCommonModeOffsets_odd[timebin]) ;
+                else             meanTimeBinRawPedestalDataVect.push_back(rawdata - fCommonModeOffsets_odd[timebin]) ; 
             }
             else {
                 meanTimeBinRawPedestalDataVect.push_back(rawdata - fCommonModeOffsets[timebin]) ;
@@ -814,3 +634,4 @@ void SRSAPVEvent::ComputeMeanTimeBinPedestalData() {
         meanTimeBinPedestalDataVect.clear() ;
     }
 }
+

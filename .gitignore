@@ -1,6 +1,7 @@
 # Back-Up Files #
 #################
 *~
+._*
 
 # Binary Files #
 ################
@@ -18,11 +19,26 @@ results/*.png
 
 # Misc #
 ########
+core.*
+configFileDir/core.*
 
 # ROOT Files #
 ##############
 *.root
+results/GE3_CERN001
+results/GE4_CERN002
+results/GE6L_CERN002
+results/Initial_Analysis
 
 # Text Files #
 ##############
+results/mapping.cfg
+configFileDir/newMappingCMScernData2014.cfg
+configFileDir/oldMappingCMScernData2014.cfg
+configFileDir/Mapping_GE11-IV.cfg
+configFileDir/Mapping_GE11-VI-L.cfg
 
+# Tutorial Files #
+##################
+configFileDir/tutorial
+configFileDir/tutorial/*
