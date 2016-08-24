@@ -37,7 +37,8 @@ CPPFLAGS	:= $(ROOT_CPPFLAGS) $(DATE_CPPFLAGS) $(DATE_RCPROXYCFLAGS) $(ALIROOT_CP
 #CXX		:= g++ -c 
 CC              := gcc -c -g
 CFLAGS          := $(ROOT_CFLAGS) $(DATE_CFLAGS) $(ALIROOT_CFLAGS) $(AMORE_CFLAGS)
-CXX             := g++ -c -g
+#CXX             := g++ -c -g
+CXX		:= g++ -c -g3 -O0
 
 CXXFLAGS	:= $(CFLAGS)
 LD		:= g++ 

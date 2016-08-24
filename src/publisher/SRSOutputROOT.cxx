@@ -1,7 +1,6 @@
 #include "SRSOutputROOT.h"
 ClassImp(SRSOutputROOT);
 
-//SRSOutputROOT::SRSOutputROOT(const char * cfgname, TString zeroSupCutStr, TString rootDataType) {
 SRSOutputROOT::SRSOutputROOT(TString zeroSupCutStr, TString rootDataType) {
     fRunName = "toto";
     fRunType = "PHYSICS" ;
@@ -11,7 +10,6 @@ SRSOutputROOT::SRSOutputROOT(TString zeroSupCutStr, TString rootDataType) {
     
     fZeroSupCut = zeroSupCutStr.Atoi();
     fROOTDataType = rootDataType ;
-    //  InitRootFile(cfgname) ;
 }
 
 //====================================================================================================================
@@ -36,7 +34,6 @@ SRSOutputROOT::~SRSOutputROOT() {
             DeleteClustersTree() ;
         }
     }
-    
 }
 
 //====================================================================================================================
@@ -151,7 +148,6 @@ void SRSOutputROOT::FillHitsTree(SRSEventBuilder * eventbuilder) {
     
     map < TString, list <SRSHit * > >  hitsInDetectorPlaneMap = eventbuilder->GetHitsInDetectorPlane() ;
     map < TString, list <SRSHit * > >::const_iterator detPlane_itr ;
-    
     for (detPlane_itr = hitsInDetectorPlaneMap.begin(); detPlane_itr != hitsInDetectorPlaneMap.end(); detPlane_itr++) {
         TString detPlaneName = (* detPlane_itr).first ;
         
@@ -191,7 +187,7 @@ void SRSOutputROOT::FillHitsTree(SRSEventBuilder * eventbuilder) {
                     timebinCharges[t] = hit->GetTimeBinADCs()[t] ;
                 }
             }
-            
+	    
             m_adc0[m_chID] = (Short_t) timebinCharges[0];
             m_adc1[m_chID] = (Short_t) timebinCharges[1];
             m_adc2[m_chID] = (Short_t) timebinCharges[2];
@@ -229,6 +225,7 @@ void SRSOutputROOT::FillHitsTree(SRSEventBuilder * eventbuilder) {
         listOfHits.clear() ;
     }
     hitsInDetectorPlaneMap.clear() ;
+
     fHitTree->Fill() ;
 }
 
@@ -337,22 +334,23 @@ void SRSOutputROOT::FillTrackingTree(SRSEventBuilder * eventbuilder, SRSTrack * 
 //void SRSOutputROOT::InitRootFile(const char * cfgname) {
 void SRSOutputROOT::InitRootFile() {
     
-    TString fileName  = fRunName + "_dataTree.root";
+    /*TString fileName  = fRunName + "_dataTree.root";
     
     if (fRunFilePrefix == "BeamPosition") fileName = fRunName + "_BP" + fRunFileValue + "_dataTree.root";
     if (fRunFilePrefix == "HVScan")       fileName = fRunName + "_HV" + fRunFileValue + "_dataTree.root";
-    printf("  SRSOutputROOT::InitRootFile() ==> Init Root file %s \n",fileName.Data());
+    printf("  SRSOutputROOT::InitRootFile() ==> Init Root file %s \n",fileName.Data());*/
     
     m_evtID = 0 ;
     m_chID = 0 ;
     m_nclust = 0 ;
     
-    fFile = TFile::Open(fileName,"RECREATE");
-    
+    //fFile = TFile::Open(fileName,"RECREATE");
+    //fFile->Open(fileName, "RECREATE");
+
     if (fZeroSupCut == 0) {
         printf("  SRSOutputROOT::InitRootFile() ==> Creating the Hit Tree: fHitTree \n") ;
         fHitTree = new TTree("THit","GEM Hit Data Rootfile") ;
-        fHitTree->SetDirectory(fFile) ;
+        //fHitTree->SetDirectory(fFile) ;
         
         m_strip         = new Int_t[10000] ;
         m_hit_detID     = new Int_t[10000] ;
@@ -437,44 +435,44 @@ void SRSOutputROOT::InitRootFile() {
         if (fROOTDataType == "HITS_ONLY") {
             printf("  SRSOutputROOT::InitRootFile() ==> Creating the Hit Tree: fHitTree \n") ;
             fHitTree = new TTree("THit","GEM Hit Data Rootfile") ;
-            fHitTree->SetDirectory(fFile) ;
+            //fHitTree->SetDirectory(fFile) ;
             
-            m_hit_detID     = new Int_t[2000] ;
-            m_hit_planeID   = new Int_t[2000] ;
-            m_hit_timeBin   = new Int_t[2000] ;
-            m_hit_etaSector = new Short_t[2000] ;
+            m_strip	    = new Int_t[10000] ;
+            m_hit_detID     = new Int_t[10000] ;
+            m_hit_planeID   = new Int_t[10000] ;
+            m_hit_timeBin   = new Int_t[10000] ;
+            m_hit_etaSector = new Short_t[10000] ;
             
-            m_adc0  = new Short_t[2000] ;
-            m_adc1  = new Short_t[2000] ;
-            m_adc2  = new Short_t[2000] ;
-            m_adc3  = new Short_t[2000] ;
-            m_adc4  = new Short_t[2000] ;
-            m_adc5  = new Short_t[2000] ;
-            m_adc6  = new Short_t[2000] ;
-            m_adc7  = new Short_t[2000] ;
-            m_adc8  = new Short_t[2000] ;
-            m_adc9  = new Short_t[2000] ;
-            m_adc10 = new Short_t[2000] ;
-            m_adc11 = new Short_t[2000] ;
-            m_adc12 = new Short_t[2000] ;
-            m_adc13 = new Short_t[2000] ;
-            m_adc14 = new Short_t[2000] ;
-            m_adc15 = new Short_t[2000] ;
-            m_adc16 = new Short_t[2000] ;
-            m_adc17 = new Short_t[2000] ;
-            m_adc18 = new Short_t[2000] ;
-            m_adc19 = new Short_t[2000] ;
-            m_adc20 = new Short_t[2000] ;
-            m_adc21 = new Short_t[2000] ;
-            m_adc22 = new Short_t[2000] ;
-            m_adc23 = new Short_t[2000] ;
-            m_adc24 = new Short_t[2000] ;
-            m_adc25 = new Short_t[2000] ;
-            m_adc26 = new Short_t[2000] ;
-            m_adc27 = new Short_t[2000] ;
-            m_adc28 = new Short_t[2000] ;
-            m_adc29 = new Short_t[2000] ;
-            m_strip   = new Int_t[2000] ;
+            m_adc0  = new Short_t[10000] ;
+            m_adc1  = new Short_t[10000] ;
+            m_adc2  = new Short_t[10000] ;
+            m_adc3  = new Short_t[10000] ;
+            m_adc4  = new Short_t[10000] ;
+            m_adc5  = new Short_t[10000] ;
+            m_adc6  = new Short_t[10000] ;
+            m_adc7  = new Short_t[10000] ;
+            m_adc8  = new Short_t[10000] ;
+            m_adc9  = new Short_t[10000] ;
+            m_adc10 = new Short_t[10000] ;
+            m_adc11 = new Short_t[10000] ;
+            m_adc12 = new Short_t[10000] ;
+            m_adc13 = new Short_t[10000] ;
+            m_adc14 = new Short_t[10000] ;
+            m_adc15 = new Short_t[10000] ;
+            m_adc16 = new Short_t[10000] ;
+            m_adc17 = new Short_t[10000] ;
+            m_adc18 = new Short_t[10000] ;
+            m_adc19 = new Short_t[10000] ;
+            m_adc20 = new Short_t[10000] ;
+            m_adc21 = new Short_t[10000] ;
+            m_adc22 = new Short_t[10000] ;
+            m_adc23 = new Short_t[10000] ;
+            m_adc24 = new Short_t[10000] ;
+            m_adc25 = new Short_t[10000] ;
+            m_adc26 = new Short_t[10000] ;
+            m_adc27 = new Short_t[10000] ;
+            m_adc28 = new Short_t[10000] ;
+            m_adc29 = new Short_t[10000] ;
             
             printf("  SRSOutputROOT::InitRootFile() ==> Initialising the branches for fHitTree \n") ;
             fHitTree->Branch("evtID",&m_evtID,"evtID/I") ;
@@ -521,7 +519,7 @@ void SRSOutputROOT::InitRootFile() {
         else if (fROOTDataType == "CLUSTERS_ONLY") {
             printf("  SRSOutputROOT::InitRootFile() ==> Creating the Cluster tree: fClusterTree \n") ;
             fClusterTree = new TTree("TCluster","GEM Cluster Data Rootfile") ;
-            fClusterTree->SetDirectory(fFile) ;
+            //fClusterTree->SetDirectory(fFile) ;
             
             m_clustSize    = new Int_t[200] ;
             m_clustTimeBin = new Int_t[200] ;
@@ -548,7 +546,7 @@ void SRSOutputROOT::InitRootFile() {
             printf("  SRSOutputROOT::InitRootFile() ==> Creating the Tracking tree: fTrackingTree\n") ;
             
             fTrackingTree = new TTree("TTracking","Data from FLYSUB Test Beam @ FNAL: ") ;
-            fTrackingTree ->SetDirectory(fFile) ;
+            //fTrackingTree ->SetDirectory(fFile) ;
             
             m_REF1   = new Float_t[3] ;
             m_REF2   = new Float_t[3] ;
@@ -570,44 +568,44 @@ void SRSOutputROOT::InitRootFile() {
         else {
             printf("  SRSOutputROOT::InitRootFile() ==> Creating the Hit Tree: fHitTree \n") ;
             fHitTree = new TTree("THit","GEM Hit Data Rootfile") ;
-            fHitTree->SetDirectory(fFile) ;
+            //fHitTree->SetDirectory(fFile) ;
             
-            m_hit_detID     = new Int_t[2000] ;
-            m_hit_planeID   = new Int_t[2000] ;
-            m_hit_etaSector = new Short_t[2000] ;
-            m_hit_timeBin   = new Int_t[2000] ;
+            m_strip	    = new Int_t[10000] ;
+            m_hit_detID     = new Int_t[10000] ;
+            m_hit_planeID   = new Int_t[10000] ;
+            m_hit_etaSector = new Short_t[10000] ;
+            m_hit_timeBin   = new Int_t[10000] ;
             
-            m_adc0  = new Short_t[2000] ;
-            m_adc1  = new Short_t[2000] ;
-            m_adc2  = new Short_t[2000] ;
-            m_adc3  = new Short_t[2000] ;
-            m_adc4  = new Short_t[2000] ;
-            m_adc5  = new Short_t[2000] ;
-            m_adc6  = new Short_t[2000] ;
-            m_adc7  = new Short_t[2000] ;
-            m_adc8  = new Short_t[2000] ;
-            m_adc9  = new Short_t[2000] ;
-            m_adc10 = new Short_t[2000] ;
-            m_adc11 = new Short_t[2000] ;
-            m_adc12 = new Short_t[2000] ;
-            m_adc13 = new Short_t[2000] ;
-            m_adc14 = new Short_t[2000] ;
-            m_adc15 = new Short_t[2000] ;
-            m_adc16 = new Short_t[2000] ;
-            m_adc17 = new Short_t[2000] ;
-            m_adc18 = new Short_t[2000] ;
-            m_adc19 = new Short_t[2000] ;
-            m_adc20 = new Short_t[2000] ;
-            m_adc21 = new Short_t[2000] ;
-            m_adc22 = new Short_t[2000] ;
-            m_adc23 = new Short_t[2000] ;
-            m_adc24 = new Short_t[2000] ;
-            m_adc25 = new Short_t[2000] ;
-            m_adc26 = new Short_t[2000] ;
-            m_adc27 = new Short_t[2000] ;
-            m_adc28 = new Short_t[2000] ;
-            m_adc29 = new Short_t[2000] ;
-            m_strip   = new Int_t[2000] ;
+            m_adc0  = new Short_t[10000] ;
+            m_adc1  = new Short_t[10000] ;
+            m_adc2  = new Short_t[10000] ;
+            m_adc3  = new Short_t[10000] ;
+            m_adc4  = new Short_t[10000] ;
+            m_adc5  = new Short_t[10000] ;
+            m_adc6  = new Short_t[10000] ;
+            m_adc7  = new Short_t[10000] ;
+            m_adc8  = new Short_t[10000] ;
+            m_adc9  = new Short_t[10000] ;
+            m_adc10 = new Short_t[10000] ;
+            m_adc11 = new Short_t[10000] ;
+            m_adc12 = new Short_t[10000] ;
+            m_adc13 = new Short_t[10000] ;
+            m_adc14 = new Short_t[10000] ;
+            m_adc15 = new Short_t[10000] ;
+            m_adc16 = new Short_t[10000] ;
+            m_adc17 = new Short_t[10000] ;
+            m_adc18 = new Short_t[10000] ;
+            m_adc19 = new Short_t[10000] ;
+            m_adc20 = new Short_t[10000] ;
+            m_adc21 = new Short_t[10000] ;
+            m_adc22 = new Short_t[10000] ;
+            m_adc23 = new Short_t[10000] ;
+            m_adc24 = new Short_t[10000] ;
+            m_adc25 = new Short_t[10000] ;
+            m_adc26 = new Short_t[10000] ;
+            m_adc27 = new Short_t[10000] ;
+            m_adc28 = new Short_t[10000] ;
+            m_adc29 = new Short_t[10000] ;
             
             printf("  SRSOutputROOT::InitRootFile() ==> Initialising the branches for fHitTree \n") ;
             fHitTree->Branch("evtID",&m_evtID,"evtID/I") ;
@@ -649,10 +647,10 @@ void SRSOutputROOT::InitRootFile() {
             fHitTree->Branch("detID", m_hit_detID, "detID[nch]/I");
             fHitTree->Branch("planeID", m_hit_planeID, "planeID[nch]/I");
             fHitTree->Branch("etaSector", m_hit_etaSector, "etaSector[nch]/S");
-            
+
             printf("  SRSOutputROOT::InitRootFile() ==> Creating the Cluster Tree: fClusterTree \n") ;
             fClusterTree = new TTree("TCluster","GEM Cluster Data Rootfile") ;
-            fClusterTree->SetDirectory(fFile) ;
+            //fClusterTree->SetDirectory(fFile) ;
             
             m_clustSize    = new Int_t[200] ;
             m_clustTimeBin = new Int_t[200] ;
@@ -679,16 +677,27 @@ void SRSOutputROOT::InitRootFile() {
 
 //====================================================================================================================
 void SRSOutputROOT::WriteRootFile() {
+ 
+
+    TString fileName  = fRunName + "_dataTree.root";
     
+    if (fRunFilePrefix == "BeamPosition") fileName = fRunName + "_BP" + fRunFileValue + "_dataTree.root";
+    if (fRunFilePrefix == "HVScan")       fileName = fRunName + "_HV" + fRunFileValue + "_dataTree.root";
+    printf("  SRSOutputROOT::WriteRootFile() ==> Init Root file %s \n",fileName.Data());   
+
+    fFile = new TFile(fileName, "RECREATE","",1);
+    //TDirectory *dir_Hits = fFile->mkdir("Hits");
+
     if (fZeroSupCut == 0) {
         fHitTree->Write() ;
     }
     
     else {
         if (fROOTDataType == "HITS_ONLY") {
-            // A bug to be fixed? Weird with ZS no problem, without ROOT is complaining.. mistery...
+	    //cout<<"fHitTree = " << fHitTree << endl;
+	    //fHitTree->SetDirectory(fFile);
+	    //fHitTree->SetDirectory(dir_Hits);
             fHitTree->Write() ;
-
         }
         else if (fROOTDataType == "CLUSTERS_ONLY") {
             fClusterTree->Write(); 
@@ -698,10 +707,6 @@ void SRSOutputROOT::WriteRootFile() {
         } 
         else {
             fHitTree->Write() ;
-
-		cout<<"fClusterTree = " << fClusterTree << endl;
-		cout<<"fFile = " << fFile << endl;		
-
             fClusterTree->Write();
         }
     }

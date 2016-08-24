@@ -141,11 +141,15 @@ public:
   vector< Float_t > GetUVangleReadoutMap(TString plane)     {return fUVangleReadoutMap[plane] ;}
 
   Float_t GetPlaneIDorEtaSector(TString planeName) {
+    Float_t planeIDorEtaSector;	//Set below
+
     TString readoutType = GetReadoutBoardFromDetector(GetDetectorFromPlane(planeName))  ;
-    Float_t planeIDorEtaSector = (fCartesianPlaneMap[planeName])[0] ;
-    if(readoutType == "1DSTRIPS") planeIDorEtaSector = (f1DStripsPlaneMap[planeName])[0];
-    if(readoutType == "CMSGEM")   planeIDorEtaSector = (fCMSGEMDetectorMap[planeName])[0];
-    if(readoutType == "UV_ANGLE") planeIDorEtaSector = (fUVangleReadoutMap[planeName])[0] ;
+
+    //Float_t planeIDorEtaSector = (fCartesianPlaneMap[planeName])[0] ;
+    if(readoutType == "CARTESIAN")	planeIDorEtaSector = (fCartesianPlaneMap[planeName])[0];
+    if(readoutType == "1DSTRIPS") 	planeIDorEtaSector = (f1DStripsPlaneMap[planeName])[0];
+    if(readoutType == "CMSGEM")   	planeIDorEtaSector = (fCMSGEMDetectorMap[planeName])[0];
+    if(readoutType == "UV_ANGLE") 	planeIDorEtaSector = (fUVangleReadoutMap[planeName])[0];
     return planeIDorEtaSector ;
   }
 

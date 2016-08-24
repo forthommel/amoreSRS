@@ -96,9 +96,8 @@ private:
     Int_t fNbOfChannels;
     Int_t fEventNb, fChMaskCut;
     TString fRunName, fRunType;
-    Bool_t fIsPedestalComputed, fIsMaskedChComputed, fIsAPVHeaderComputed,
-    fIsCommonModeComputed, fIsFirstEvent;
-    
+    Bool_t fIsPedestalComputed, fIsMaskedChComputed, fIsAPVHeaderComputed, fIsCommonModeComputed, fIsFirstEvent;
+       
     vector<TH1F*> fRMSDist;
     vector<TH1F*> fNoises;
     vector<TH1F*> fOffsets;

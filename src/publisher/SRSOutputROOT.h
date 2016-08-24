@@ -2,9 +2,10 @@
 #define __SRSOUTPUTROOT__
 /*******************************************************************************
  *  AMORE FOR SRS - SRS                                                         *
- *  SRSOutputROOT                                                                    *
+ *  SRSOutputROOT                                                               *
  *  SRS Module Class                                                            *
  *  Author: Kondo GNANVO, Mike Staib 01/05/2011                                 *
+ *  Contributor: Brian Dorney (08/24/2016)					*
  *******************************************************************************/
 #if !defined(__CINT__) || defined(__MAKECINT__)
 
@@ -105,8 +106,7 @@ private:
     Float_t * m_REF4;
     Float_t * m_SBS1;
     Float_t * m_UVAEIC;
-    
-    
+
     Short_t * m_adc0;     //ADC value for 1st time sample
     Short_t * m_adc1;     //ADC value for 2nd time sample
     Short_t * m_adc2;     //ADC value for 3rd time sample
@@ -137,7 +137,7 @@ private:
     Short_t * m_adc27;     //ADC value for 28th time sample
     Short_t * m_adc28;     //ADC value for 29th time sample
     Short_t * m_adc29;     //ADC value for 30th time sample
-    
+
     ClassDef(SRSOutputROOT,1)
 };
 

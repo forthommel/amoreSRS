@@ -478,6 +478,11 @@ vector<Float_t> SRSPedestal::GetAPVOffsets(Int_t apvID) {
 //==================================================================================
 vector<Float_t> SRSPedestal::GetAPVMaskedChannels(Int_t apvID) {
     SRSMapping * mapping = SRSMapping::GetInstance();
+	
+	//cout<<"SRSPedestal::GetAPVMaskedChannels() - mapping = " << mapping << endl;
+	//cout<<"fIsMaskedChComputed = " ;
+	//cout<< fIsMaskedChComputed << endl;
+
     vector < Float_t > apvMaskedChannels;
     if (!fIsMaskedChComputed) {
         Warning("SRSPedestal",

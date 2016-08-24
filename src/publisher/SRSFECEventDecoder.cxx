@@ -442,6 +442,9 @@ void SRSFECEventDecoder::BuildHits(vector<UInt_t> data32bits, Int_t fec_id, Int_
         }
         
         apvEvent->SetAllFlags(kTRUE, kTRUE) ;
+
+	//cout<<"SRSFECEventDecoder::BuildHits() - ped = " << ped << endl;
+
         if (zeroSupCut!=-999) apvEvent->SetPedestals(ped->GetAPVNoises(apvEvent->GetAPVID()), ped->GetAPVOffsets(apvEvent->GetAPVID()), ped->GetAPVMaskedChannels(apvEvent->GetAPVID())) ;
 
         //    list <SRSHit*> listOfHits = apvEvent->ComputeListOfAPVHits(eventBuilder->GetHitMaxOrTotalADCs()) ;
