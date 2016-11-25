@@ -663,15 +663,14 @@ list <SRSHit * >  SRSAPVEvent::ComputeListOfAPVHits() {
                 }
                 timeBinADCs.clear();
                 //cout << "timeBinADCs cleared" << endl;
-            }
+            }else{
             
             // Getting the rawdata (Taking into account signed integers) and save them
             Float_t rawdata = ((Float_t) fRawData16bits[idata]) ;
             if ((fRawData16bits[idata]>>8)!=0) rawdata = rawdata - 65536;
             rawdata = - rawdata ;
             timeBinADCs.push_back(rawdata) ;
-
-            
+        	}    
             // Event Dump
             //cout << "fRawData16bits.size = " << size << " channel number = " << StripNo << " rawdata = " << fRawData16bits[idata] << " idata = " << idata << " hex is : " << "0x" << std::hex << fRawData16bits[idata] << std::dec << " MSB = " << (fRawData16bits[idata]>>8) << endl;
             //printf(" CIAOOOOO \n");
@@ -780,7 +779,7 @@ list <SRSHit * > SRSAPVEvent::ComputeListOfAPVHitsZS() {
 					
 				timeBinADCs.clear();
 				//cout << "timeBinADCs cleared" << endl;
-			}
+			}else{
 
 			// Getting the rawdata (Taking into account signed integers) and save them
 			Float_t rawdata = ((Float_t) fRawData16bits[idata]) ;
@@ -788,7 +787,7 @@ list <SRSHit * > SRSAPVEvent::ComputeListOfAPVHitsZS() {
 			if ((fRawData16bits[idata]>>8)!=0) rawdata = rawdata - 65536;
 				rawdata = - rawdata ;
 				timeBinADCs.push_back(rawdata) ;
-					
+			     }	
 				// Event Dump
 				//cout << "fRawData16bits.size = " << size << " channel number = " << StripNo << 						" rawdata = " << fRawData16bits[idata] << " idata = " << idata << " hex is : " << "0x" << std::hex << fRawData16bits[idata] << std::dec << " MSB = " << (fRawData16bits[idata]>>8) << endl;
 				//cin.get();
