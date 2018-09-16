@@ -363,7 +363,7 @@ namespace amore {
                         if ( (fEvent % fEventFrequencyNumber.Atoi()) == 0 ) {
                             
                             UInt_t * buffer = 0;
-                            TDATEEventParser * parser = event.DATEEventParser();
+                            EventParser * parser = event.DATEEventParser();
                             parser->Parse();
                             
                             eventLdcIdType * firstLdcId = const_cast<eventLdcIdType*>(parser->FirstLDC());

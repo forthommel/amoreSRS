@@ -1,7 +1,8 @@
 # Top level Makefile.inc for ALICE's AMORE
 # Author: Filimon Roukoutakis
 
-include $(shell root-config --prefix)/etc/Makefile.arch
+include /usr/share/root/Makefile.arch
+#include $(shell root-config --prefix)/etc/Makefile.arch
 #include $(shell root-config --prefix)/test/Makefile.arch
 
 ROOT_CFLAGS	:= $(filter-out -I% -D%, $(shell root-config --cflags))

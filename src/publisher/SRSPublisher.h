@@ -17,7 +17,8 @@
 #include <PublisherModule.h>
 
 #include <Event.h>
-#include <TDATEEventParser.h>
+//#include <TDATEEventParser.h>
+#include <EventParser.h>
 
 #include "TFile.h"
 
@@ -56,8 +57,10 @@ namespace amore {
                 virtual void MonitorEvent(amore::core::Event& event);
                 virtual void EndOfRun(const amore::core::Run& run);
                 virtual void StartOfRun(const amore::core::Run& run);
-                virtual void EndOfSession(const amore::core::Session& session){};
-                virtual void StartOfSession(const amore::core::Session& session){};
+                /*virtual void EndOfSession(const amore::core::Session& session){};
+                virtual void StartOfSession(const amore::core::Session& session){};*/
+                virtual void EndOfSession(){};
+                virtual void StartOfSession(){};
                 
                 virtual std::string Version(); // the version of the module
                 
